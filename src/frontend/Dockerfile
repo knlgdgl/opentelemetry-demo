@@ -21,7 +21,7 @@ USER node
 
 WORKDIR /app
 COPY --chown=node:node --from=builder /home/node/.npm/ /home/node/.npm/
-COPY ./src/frontend/package*.json ./
+COPY ./package*.json ./
 RUN NODE_ENV=production npm clean-install --prefer-offline --no-audit --no-progress
 
 
