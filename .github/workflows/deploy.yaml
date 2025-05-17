@@ -1,49 +1,53 @@
-name: Build, Test, and Deploy Frontend to EKS with ECR
+name: Deploy to EKS
 
 on:
   push:
-    branches:
-      - main
-
-env:
-  REGION: ${{ secrets.AWS_REGION }}
-  CLUSTER: ${{ secrets.CLUSTER_NAME }}
-  ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
+    branches: [main]
 
 jobs:
   deploy:
+    name: Build and Deploy Frontend
     runs-on: ubuntu-latest
 
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
+      CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
+      NAMESPACE: ${{ secrets.EKS_NAMESPACE }}
+
     steps:
-    - name: Checkout Code
+    - name: Checkout repo
       uses: actions/checkout@v3
 
-    - name: Configure AWS Credentials
+    - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.REGION }}
+        aws-region: ${{ secrets.AWS_REGION }}
 
     - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build and Push Docker Image
       run: |
-        aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com
+        cd src/frontend
+        IMAGE_TAG=${ECR_REGISTRY}/otel-frontend:latest
+        docker build -t $IMAGE_TAG .
+        docker push $IMAGE_TAG
 
-    - name: Build and Push Frontend Image
+    - name: Update K8s Deployment in EKS
       run: |
-        docker build -t otel-frontend ./src/frontend
-        docker tag otel-frontend $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/otel-frontend:latest
-        docker push $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/otel-frontend:latest
+        aws eks update-kubeconfig --name $CLUSTER_NAME --region $AWS_REGION
+        kubectl set image deployment/frontend frontend=${ECR_REGISTRY}/otel-frontend:latest -n $NAMESPACE
 
-    - name: Update kubeconfig
-      run: aws eks update-kubeconfig --region $REGION --name $CLUSTER
-
-    - name: Update Frontend Deployment
+    - name: Check rollout status
       run: |
-        kubectl set image deployment/frontend frontend=$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/otel-frontend:latest -n otel-helm
-        kubectl rollout status deployment/frontend -n otel-helm
+        kubectl rollout status deployment/frontend -n $NAMESPACE
 
-    - name: Rollback on Failure
+    - name: Rollback on failure
       if: failure()
       run: |
-        kubectl rollout undo deployment/frontend -n otel-helm || true
+        echo "⚠️ Deployment failed. Rolling back..."
+        kubectl rollout undo deployment/frontend -n $NAMESPACE
