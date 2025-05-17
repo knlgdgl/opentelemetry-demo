@@ -47,13 +47,21 @@ jobs:
         GIT_MESSAGE=$(git log -1 --pretty=%s)
         echo "📦 Deploying commit: $GIT_COMMIT - $GIT_MESSAGE"
 
-        kubectl annotate deployment frontend \
+        # Update image
+        kubectl set image deployment/frontend \
+          frontend=${ECR_REGISTRY}/otel-frontend:latest \
+          -n $NAMESPACE
+
+        # Wait for rollout to complete
+        kubectl rollout status deployment/frontend -n $NAMESPACE
+
+        # Annotate current revision explicitly
+        REVISION=$(kubectl rollout history deployment/frontend -n $NAMESPACE | tail -1 | awk '{print $1}')
+        kubectl annotate deployment/frontend \
+          deployment.kubernetes.io/revision="$REVISION" \
           kubernetes.io/change-cause="Commit $GIT_COMMIT: $GIT_MESSAGE" \
           --overwrite -n $NAMESPACE
 
-        kubectl set image deployment/frontend \
-          frontend=${ECR_REGISTRY}/otel-frontend:latest \
-          --record -n $NAMESPACE
 
 
     - name: Check rollout status
