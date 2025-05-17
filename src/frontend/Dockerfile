@@ -8,10 +8,10 @@ USER node
 
 WORKDIR /app
 
-COPY ./src/frontend/package*.json ./
+COPY ./package*.json ./
 RUN npm clean-install --no-audit --no-progress
-COPY ./src/frontend/protos ./protos
-COPY ./src/frontend .
+COPY ./protos ./protos
+COPY . .
 
 RUN npm run build
 
