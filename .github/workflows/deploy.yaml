@@ -32,7 +32,6 @@ jobs:
 
     - name: Build and Push Docker Image
       run: |
-        cd src/frontend
         IMAGE_TAG=${ECR_REGISTRY}/otel-frontend:latest
         docker build -t $IMAGE_TAG -f src/frontend/Dockerfile src/frontend
         docker push $IMAGE_TAG
