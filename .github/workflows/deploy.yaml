@@ -14,6 +14,7 @@ jobs:
       ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
       CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
       NAMESPACE: ${{ secrets.EKS_NAMESPACE }}
+      KUBECONFIG: ~/.kube/config
 
     steps:
     - name: Checkout repo
@@ -27,8 +28,12 @@ jobs:
         aws-region: ${{ secrets.AWS_REGION }}
 
     - name: Login to Amazon ECR
-      id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Set up kubeconfig for EKS
+      run: |
+        mkdir -p ~/.kube
+        aws eks update-kubeconfig --name $CLUSTER_NAME --region $AWS_REGION
 
     - name: Build and Push Docker Image
       run: |
@@ -38,7 +43,6 @@ jobs:
 
     - name: Update K8s Deployment in EKS
       run: |
-        aws eks update-kubeconfig --name $CLUSTER_NAME --region $AWS_REGION
         kubectl set image deployment/frontend frontend=${ECR_REGISTRY}/otel-frontend:latest -n $NAMESPACE
 
     - name: Check rollout status
