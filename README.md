@@ -142,4 +142,4 @@ Emeritus:
 [Tracetest]: https://github.com/kubeshop/opentelemetry-demo
 [Uptrace]: https://github.com/uptrace/uptrace/tree/master/example/opentelemetry-demo
 
-Readme edited to trigger update
+Readme edited to trigger update 1
