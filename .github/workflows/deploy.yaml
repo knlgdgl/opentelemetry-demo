@@ -14,7 +14,7 @@ jobs:
       ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
       CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
       NAMESPACE: ${{ secrets.EKS_NAMESPACE }}
-      KUBECONFIG: ~/.kube/config
+      KUBECONFIG: $HOME/.kube/config
 
     steps:
     - name: Checkout repo
@@ -32,8 +32,8 @@ jobs:
 
     - name: Set up kubeconfig for EKS
       run: |
-        mkdir -p ~/.kube
-        aws eks update-kubeconfig --name $CLUSTER_NAME --region $AWS_REGION
+        mkdir -p $HOME/.kube
+        aws eks update-kubeconfig --name $CLUSTER_NAME --region $AWS_REGION --kubeconfig $KUBECONFIG
 
     - name: Build and Push Docker Image
       run: |
