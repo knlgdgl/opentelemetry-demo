@@ -5,6 +5,8 @@ import CartIcon from '../CartIcon';
 import CurrencySwitcher from '../CurrencySwitcher';
 import * as S from './Header.styled';
 
+throw new Error("💥 Intentional failure to simulate deployment rollback");
+
 const Header = () => {
   return (
     <S.Header>
