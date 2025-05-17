@@ -43,7 +43,18 @@ jobs:
 
     - name: Update K8s Deployment in EKS
       run: |
-        kubectl set image deployment/frontend frontend=${ECR_REGISTRY}/otel-frontend:latest -n $NAMESPACE
+        GIT_COMMIT=$(git rev-parse --short HEAD)
+        GIT_MESSAGE=$(git log -1 --pretty=%s)
+        echo "📦 Deploying commit: $GIT_COMMIT - $GIT_MESSAGE"
+
+        kubectl annotate deployment frontend \
+          kubernetes.io/change-cause="Commit $GIT_COMMIT: $GIT_MESSAGE" \
+          --overwrite -n $NAMESPACE
+
+        kubectl set image deployment/frontend \
+          frontend=${ECR_REGISTRY}/otel-frontend:latest \
+          --record -n $NAMESPACE
+
 
     - name: Check rollout status
       run: |
