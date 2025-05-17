@@ -34,7 +34,7 @@ jobs:
       run: |
         cd src/frontend
         IMAGE_TAG=${ECR_REGISTRY}/otel-frontend:latest
-        docker build -t $IMAGE_TAG .
+        docker build -t $IMAGE_TAG -f Dockerfile .
         docker push $IMAGE_TAG
 
     - name: Update K8s Deployment in EKS
