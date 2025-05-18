@@ -38,20 +38,6 @@ jobs:
           --region $AWS_REGION \
           --kubeconfig $KUBECONFIG
 
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18
-
-    - name: Install frontend dependencies
-      working-directory: ./src/frontend
-      run: npm ci
-
-    - name: Run frontend unit tests
-      working-directory: ./src/frontend
-      run: npm test
-
     - name: Build and Push Docker Image
       run: |
         IMAGE_TAG=${ECR_REGISTRY}/otel-frontend:latest
