@@ -1,0 +1,27 @@
+# Please edit the object below. Lines beginning with a '#' will be ignored,
+# and an empty file will abort the edit. If an error occurs while saving this file will be
+# reopened with the relevant failures.
+#
+apiVersion: v1
+data:
+  alertmanager.yaml: Z2xvYmFsOgogIHJlc29sdmVfdGltZW91dDogNW0KICBzbXRwX3NtYXJ0aG9zdDogJ3NtdHAuZ21haWwuY29tOjU4NycKICBzbXRwX2Zyb206ICdrdW5hbGdhZGdpbDk4QGdtYWlsLmNvbScKICBzbXRwX2F1dGhfdXNlcm5hbWU6ICdrdW5hbGdhZGdpbDk4QGdtYWlsLmNvbScKICBzbXRwX2F1dGhfcGFzc3dvcmQ6ICdhcXpyIHF5ZXMgb3dlbCB5dXBiJwogIAppbmhpYml0X3J1bGVzOgotIGVxdWFsOgogIC0gbmFtZXNwYWNlCiAgLSBhbGVydG5hbWUKICBzb3VyY2VfbWF0Y2hlcnM6CiAgLSBzZXZlcml0eSA9IGNyaXRpY2FsCiAgdGFyZ2V0X21hdGNoZXJzOgogIC0gc2V2ZXJpdHkgPX4gd2FybmluZ3xpbmZvCi0gZXF1YWw6CiAgLSBuYW1lc3BhY2UKICAtIGFsZXJ0bmFtZQogIHNvdXJjZV9tYXRjaGVyczoKICAtIHNldmVyaXR5ID0gd2FybmluZwogIHRhcmdldF9tYXRjaGVyczoKICAtIHNldmVyaXR5ID0gaW5mbwotIGVxdWFsOgogIC0gbmFtZXNwYWNlCiAgc291cmNlX21hdGNoZXJzOgogIC0gYWxlcnRuYW1lID0gSW5mb0luaGliaXRvcgogIHRhcmdldF9tYXRjaGVyczoKICAtIHNldmVyaXR5ID0gaW5mbwotIHRhcmdldF9tYXRjaGVyczoKICAtIGFsZXJ0bmFtZSA9IEluZm9JbmhpYml0b3IKCnJlY2VpdmVyczoKLSBuYW1lOiAibnVsbCIKLSBuYW1lOiAiZW1haWwtbWUiCiAgZW1haWxfY29uZmlnczoKICAtIHRvOiAna3VnYWRnaWxAdW1kLmVkdScKICAgIHNlbmRfcmVzb2x2ZWQ6IHRydWUKCnJvdXRlOgogIGdyb3VwX2J5OgogIC0gbmFtZXNwYWNlCiAgZ3JvdXBfaW50ZXJ2YWw6IDVtCiAgZ3JvdXBfd2FpdDogMzBzCiAgcmVjZWl2ZXI6IGVtYWlsLW1lCiAgcmVwZWF0X2ludGVydmFsOiAxMmgKICByb3V0ZXM6CiAgLSBtYXRjaGVyczoKICAgIC0gYWxlcnRuYW1lID0gIldhdGNoZG9nIgogICAgcmVjZWl2ZXI6ICJudWxsIgp0ZW1wbGF0ZXM6Cg==
+kind: Secret
+metadata:
+  annotations:
+    meta.helm.sh/release-name: prometheus
+    meta.helm.sh/release-namespace: monitoring
+  creationTimestamp: "2025-05-10T16:18:50Z"
+  labels:
+    app: kube-prometheus-stack-alertmanager
+    app.kubernetes.io/instance: prometheus
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: kube-prometheus-stack
+    app.kubernetes.io/version: 72.3.0
+    chart: kube-prometheus-stack-72.3.0
+    heritage: Helm
+    release: prometheus
+  name: alertmanager-prometheus-kube-prometheus-alertmanager
+  namespace: monitoring
+  resourceVersion: "3755"
+  uid: 4a485b8b-1482-49e6-aa7b-47621c3f2f1d
+type: Opaque
