@@ -31,6 +31,13 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
 
     - name: Set up kubeconfig for EKS
+      run: |
+        mkdir -p ~/.kube
+        aws eks update-kubeconfig \
+          --name $CLUSTER_NAME \
+          --region $AWS_REGION \
+          --kubeconfig $KUBECONFIG
+
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
@@ -44,13 +51,6 @@ jobs:
     - name: Run frontend unit tests
       working-directory: ./src/frontend
       run: npm test
-
-      run: |
-        mkdir -p ~/.kube
-        aws eks update-kubeconfig \
-          --name $CLUSTER_NAME \
-          --region $AWS_REGION \
-          --kubeconfig $KUBECONFIG
 
     - name: Build and Push Docker Image
       run: |
