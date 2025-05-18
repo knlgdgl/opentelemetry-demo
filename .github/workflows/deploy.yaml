@@ -31,6 +31,20 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
 
     - name: Set up kubeconfig for EKS
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+
+    - name: Install frontend dependencies
+      working-directory: ./src/frontend
+      run: npm ci
+
+    - name: Run frontend unit tests
+      working-directory: ./src/frontend
+      run: npm test
+
       run: |
         mkdir -p ~/.kube
         aws eks update-kubeconfig \
