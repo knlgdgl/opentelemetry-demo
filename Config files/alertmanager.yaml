@@ -3,7 +3,7 @@ global:
   smtp_smarthost: 'smtp.gmail.com:587'
   smtp_from: 'kunalgadgil98@gmail.com'
   smtp_auth_username: 'kunalgadgil98@gmail.com'
-  smtp_auth_password: 'aqzr qyes owel yupb' #Create app password in Google Account Settings
+  smtp_auth_password: '' #Create app password in Google Account Settings
   
 inhibit_rules:
 - equal:
